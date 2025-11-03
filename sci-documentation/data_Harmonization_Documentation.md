@@ -1,7 +1,5 @@
 ***This is the working doc for the Science and Data Harmonization Core***
 
-#![](images/main.png){width="221"} insert main fairplex image here
-
 # **Introduction**
 
 ### The SysBio FAIRplex teams are developing a federated data platform designed to promote collaborative, transparent, and reproducible research following FAIR principles. The FAIRplex platform will enable researchers to discover and access data from the Accelerating Medicines Partnership® (AMP®) program[^merged_core_dti_docs-1]. Central to the platform will be a catalog of AMP datasets that are harmonized into a Common Data Model (SysBio CDM) for indexing, search, and combined analysis. The CDM will leverage foundational data engineering efforts and guidelines preceding the SysBio FAIRplex, such as Ontology for Biomedical Investigations (OBI)[^merged_core_dti_docs-2], Common Fund Data Ecosystem (CFDE)[^merged_core_dti_docs-3], Observational Medical Outcomes Partnership (OMOP)[^merged_core_dti_docs-4], and the NLM CDE Repository[^merged_core_dti_docs-5].
@@ -93,32 +91,48 @@ Both journeys leverage Common Data Elements (CDEs), standardized pipelines, and 
 **SysBio Portal**: Public-facing visualization of summary-level data and connections to other sources
 
 ### **Data Architecture**
+---
 
-┌─────────────────────────────────────────────────────────┐\
-│ DATA STRUCTURE │\
-└─────────────────────────────────────────────────────────┘
+## **DATA STRUCTURE**
 
-📁 harmonized\_$$date$$/\
-├── clinical_meta/\
-│ └── tabular_data.hdf \# OMOP-compliant CDEs\
-├── bulk_omics/\
-│ └── tabular_data.hdf \# Normalized counts, z-transformed\
-├── cell_omics/\
-│ └── tabular_data.hdf \# Pseudobulked, cell-type annotated\
-└── genetics/\
-├── tabular_data.hdf \# Variant annotations + covariates\
-├── imputed_data.pgen \# PLINK format\
-└── joint_call.pgen \# PLINK format
+---
 
-📁 summary\_$$date$$/\
-├── bulk_omics/\
-│ ├── differential_expression.hdf\
-│ ├── networks.hdf\
-│ └── PCA.hdf\
-├── cell_omics/\
-│ └── differential_expression.hdf\
-└── genetics/\
+<details>
+<summary><strong>📁 harmonized_$(date)/</strong></summary>
+
+```
+clinical_meta/
+└── tabular_data.hdf            # OMOP-compliant CDEs
+
+bulk_omics/
+└── tabular_data.hdf            # Normalized counts, z-scored
+
+cell_omics/
+└── tabular_data.hdf            # Pseudobulked, cell-type annotated
+
+genetics/
+├── tabular_data.hdf            # Variant annotations + covariates
+├── imputed_data.pgen           # PLINK format
+└── joint_call.pgen             # PLINK format
+```
+</details>
+
+<details>
+<summary><strong>📁 summary_$(date)/</strong></summary>
+
+```
+bulk_omics/
+├── differential_expression.hdf
+├── networks.hdf
+└── PCA.hdf
+
+cell_omics/
+└── differential_expression.hdf
+
+genetics/
 └── GWAS.hdf
+```
+</details>
 
 ------------------------------------------------------------------------
 
@@ -136,19 +150,13 @@ Sarah explores the SysBio FAIRplex Portal for documentation and tools
 
 #### *Step 2: Federated Authentication*
 
-Sarah follows the link to FAIRkit and logs in, which initiates flow through the Passport Broker:
-
-┌─────────┐ ┌──────────┐ ┌──────────────┐\
-│ FAIRkit │────────\>│ FAIRplex │────────\>│ Passport │\
-│ User │ │ Service │ │ Broker (RAS) │\
-└─────────┘ └──────────┘ └──────────────┘\
-│\
-├──────────────────────┐\
-↓ ↓\
-┌──────────┐ ┌──────────┐\
-│ AMP AD │ │ AMP PD │\
-│ Visa │ │ Visa │\
-└──────────┘ └──────────┘
+<p align="center">
+<code>FAIRkit User</code> ➜ <code>FAIRplex Service</code> ➜ <code>Passport Broker (RAS)</code>
+<br><br>
+⬇️
+<br><br>
+<code>AMP-AD Visa</code>  <code>AMP-PD Visa</code>
+</p>
 
 Her authenticated session now provides access to datasets across AMP AD, AMP PD, AMP RA/SLE, and AMP X based on her approved Data Access Requests (DARs).
 
@@ -199,46 +207,47 @@ Sarah uploads the Sample Manifest to Verily Workbench, which provisions a secure
 #### *Analysis Workflow*
 
 **Step 1: Load Harmonized Data**
-
+```
 import pandas as pd\
 import h5py
 
-*\# Load clinical metadata*\
-clinical = pd.read_hdf('harmonized_20250915/clinical_meta/tabular_data.hdf',\
-key='rosmap_msbb_clinical')
+# Load clinical metadata
+clinical = pd.read_hdf('harmonized_20250915/clinical_meta/tabular_data.hdf', key='rosmap_msbb_clinical')
 
-*\# Load bulk RNA-seq (normalized, z-transformed)*\
-**with** h5py.File('harmonized_20250915/bulk_omics/tabular_data.hdf', 'r') as f:\
-rosmap_counts = f$$'rosmap\_dlpfc\_bulk'$$$$:$$\
-msbb_counts = f$$'msbb\_dlpfc\_bulk'$$$$:$$\
-gene_ids = f$$'gene\_ensembl\_ids'$$$$:$$
+# Load bulk RNA-seq (normalized, z-transformed)
+h5py.File('harmonized_20250915/bulk_omics/tabular_data.hdf', 'r') as f:
+rosmap_counts = f$$'rosmap_dlpfc_bulk'$$$$:$$
+msbb_counts = f$$'msbb_dlpfc_bulk'$$$$:$$
+gene_ids = f$$'gene_ensembl_ids'$$$$:$$
 
-*\# Load genetics (PLINK2)*\
-from pandas_plink import read_plink1_bin\
+# Load genetics (PLINK2)
+from pandas_plink import read_plink1_bin
 genotypes = read_plink1_bin('harmonized_20250915/genetics/imputed_data.pgen')
-
+```
 **Key Features of Harmonized Data**: - **Same column names** across datasets (e.g., age_at_baseline, not age1, Age, age_diagnosis) - **Same numeric scale**: Z-transformed expression values (mean=0, SD=1) enable direct comparison - **Linked by person_id**: Clinical, omics, and genetics data join seamlessly via participant_id
 
 **Step 2: Differential Expression Analysis**
 
 Sarah runs a meta-analysis across ROSMAP and MSBB:
+```
 
-from scipy.stats import ttest_ind\
+from scipy.stats import ttest_ind
 import statsmodels.api as sm
 
-*\# Example: Gene-level t-tests (cases vs. controls)*\
-results = []\
-**for** gene_idx **in** range(len(gene_ids)):\
-rosmap_case = rosmap_counts$$clinical\['diagnosis'$$=='AD', gene_idx]\
-rosmap_ctrl = rosmap_counts$$clinical\['diagnosis'$$=='NCI', gene_idx]
+# Example: Gene-level t-tests (cases vs. controls)
+results = []
+for gene_idx in range(len(gene_ids)):
+rosmap_case = rosmap_counts$$clinical
+['diagnosis'$$=='AD', gene_idx]
+rosmap_ctrl = rosmap_counts$$clinical
+['diagnosis'$$=='NCI', gene_idx]
 
-```         
-t\_stat, p\_val \= ttest\_ind(rosmap\_case, rosmap\_ctrl)  
-results.append({'gene': gene\_ids\[gene\_idx\], 't': t\_stat, 'p': p\_val})
-```
+t_stat, p_val= ttest_ind(rosmap_case, rosmap_ctrl)  
+results.append({'gene': gene_ids\[gene_idx\], 't': t_stat, 'p': p_val})
 
 results_df = pd.DataFrame(results)
 
+```
 Because data is **z-transformed**, effect sizes are comparable across studies. Sarah identifies 342 genes with FDR \< 0.05, enriched for: - Inflammatory pathways (IL6, TNF signaling) - Microglial activation (TREM2, CD33)
 
 **Step 3: Cross-Disease Comparison**
@@ -305,7 +314,7 @@ This CDE will be mirrored to the **NLM CDE Repository** for future reuse and int
 #### *Step 2: OMOP Transformation*
 
 James runs a Python script to transform his clinical data into OMOP CDM format:
-
+```
 *\# Map to PERSON table*\
 person_df = pd.DataFrame({\
 'person_id': ibd_data$$'SubjectID'$$,\
@@ -324,13 +333,13 @@ condition_df = pd.DataFrame({\
 
 *\# Save as HDF5*\
 person_df.to_hdf('clinical_meta/tabular_data.hdf', key='X_clinical')
-
+```
 ### **Phase 3: Genetics Data Harmonization**
 
 James’ WGS data is in VCF format with non-standardized variant IDs. He uses the **FAIRplex genetics pipeline** to create interoperable data.
 
 #### *Step 1: Variant Standardization*
-
+```
 *\# Convert to PLINK2 with standardized naming*\
 plink2 --vcf ibd_wgs.vcf.gz **\\**\
 --set-all-var-ids '\@:#:$r:$a' **\\**\
@@ -340,11 +349,11 @@ plink2 --vcf ibd_wgs.vcf.gz **\\**\
 
 *\# Output: X_standardized.pgen (PLINK2 binary)*\
 *\# Variants now named: chr1_12345_A_G (not rs123456)*
-
+```
 #### *Step 2: Quality Control and Imputation*
 
 Following the **CARD Unified Pipeline** as shown on FAIRkit’s genetics examples, James: 1. Filters variants (MAF \> 0.01, HWE p \> 1e-6, genotype call rate \> 95%) 2. Imputes missing genotypes using TOPMed reference panel 3. Generates principal components (PCs) to capture population structure
-
+```
 *\# Save genetics metadata with covariates*\
 genetics_meta = pd.DataFrame({\
 'person_id': sample_ids,\
@@ -355,7 +364,7 @@ genetics_meta = pd.DataFrame({\
 'imputation_panel': 'TOPMed'\
 })\
 genetics_meta.to_hdf('genetics/tabular_data.hdf', key='X_ibd_genetics')
-
+```
 **Output Files**: - imputed_data.pgen: 10.3M variants in PLINK2 format - tabular_data.hdf: Metadata + PCs for covariate adjustment
 
 ### **Phase 4: Single-Cell RNA-seq Harmonization**
@@ -368,7 +377,7 @@ Using **Harmony** (a tool recommended in FAIRplex documentation), James integrat
 
 **library**(Seurat)\
 **library**(harmony)
-
+```
 *\# Load data*\
 seurat_obj \<- **readRDS**('ibd_scrna.rds')
 
@@ -379,13 +388,13 @@ seurat_obj \<- **RunHarmony**(seurat_obj, group.by.vars = 'dataset')
 seurat_obj \<- **FindClusters**(seurat_obj, resolution = 0.5)\
 cell_types \<- **c**('T_cell', 'B_cell', 'Epithelial', 'Macrophage', ...)\
 seurat_obj$cell\_type \<- cell\_types\[seurat\_obj$seurat_clusters]
-
+```
 #### *Step 2: Pseudobulking and Normalization*
 
 James aggregates counts by cell type and normalizes:
 
 **library**(DESeq2)
-
+```
 *\# Pseudobulk by cell type*\
 pseudobulk \<- **AggregateExpression**(seurat_obj,\
 group.by = **c**('person_id', 'cell_type'),\
@@ -400,24 +409,24 @@ normalized_counts \<- **counts**(dds, normalized=TRUE)
 
 *\# Z-transform (mean=0, SD=1) for interoperability*\
 z_transformed \<- **scale**(**log2**(normalized_counts + 1))
-
+```
 **Why Z-transformation?** - Ensures **same numeric scale** across datasets (critical for meta-analysis) - Accounts for technical variation (batch effects, sequencing depth) - Enables direct comparison with existing FAIRplex datasets
 
 #### *Step 3: Export to HDF5*
-
+```
 import h5py
 
 **with** h5py.File('cell_omics/tabular_data.hdf', 'w') as f:\
 f.create_dataset('X_ibd_intestine_tcells', data=z_transformed$$'T\_cell'$$)\
 f.create_dataset('aim_ibd_intestine_macrophages', data=z_transformed$$'Macrophage'$$)\
 f.create_dataset('gene_ensembl_ids', data=gene_ids)
-
+```
 ### **Phase 5: Summary Statistics Generation**
 
 James runs standard analyses to generate summary-level data for the **SysBio Portal**:
 
 #### *Differential Expression*
-
+```
 from scipy.stats import ttest_ind
 
 *\# Compare IBD cases vs. controls (T cells)*\
@@ -426,7 +435,7 @@ results = []\
 case_expr = z_transformed$$'T\_cell'$$$$metadata\['diagnosis'$$=='IBD', gene]\
 ctrl_expr = z_transformed$$'T\_cell'$$$$metadata\['diagnosis'$$=='Control', gene]
 
-```         
+        
 beta, se, p\_val \= ttest\_ind(case\_expr, ctrl\_expr)  
 results.append({  
     'gene': gene,  
@@ -439,15 +448,14 @@ results.append({
     'n\_controls': len(ctrl\_expr),  
     'dataset': 'X\_IBD'  
 })
-```
 
 *\# Save to HDF5*\
 results_df = pd.DataFrame(results)\
 results_df.to_hdf('summary_20250915/cell_omics/differential_expression.hdf',\
 key='X_ibd_tcell_de')
-
+```
 #### *GWAS*
-
+```
 *\# Run PLINK2 association test*\
 plink2 --pgen ibd_standardized.pgen **\\**\
 --pheno ibd_phenotype.txt **\\**\
@@ -457,7 +465,7 @@ plink2 --pgen ibd_standardized.pgen **\\**\
 
 *\# Convert to HDF5*\
 python convert_gwas_to_hdf5.py ibd_gwas.assoc.glm
-
+```
 **Summary Data Schema** (compatible with SysBio Portal):
 
 | Field      | Description                                          |
@@ -636,21 +644,21 @@ This data landscape documentation focuses on the AMP Projects with genetics and 
 ## AMP Projects with available genetics and omics data:
 
 -   [AMP AD](https://fnih.org/our-programs/accelerating-medicines-partnership-amp/amp-alzheimers-disease-2-0/)
-    -   Data is hosted in the [AD Knowledge Portal](https://adknowledgeportal.synapse.org/) along with data from a variety of other Alzheimer’s Disease and Related Dementia programs.\
+    -   Data is hosted in the [AD Knowledge Portal](https://adknowledgeportal.synapse.org/) along with data from a variety of other Alzheimer’s Disease and Related Dementia programs.
 -   [AMP CMD](https://fnih.org/our-programs/accelerating-medicines-partnership-amp/amp-common-metabolic-disorders/)
-    -   Data is hosted in the [AMP CMD Knowledge Portal](https://hugeamp.org/) and the [AMP CMD Genome Atlas](https://cmdga.org/)\
+    -   Data is hosted in the [AMP CMD Knowledge Portal](https://hugeamp.org/) and the [AMP CMD Genome Atlas](https://cmdga.org/)
 -   [AMP PD](https://fnih.org/our-programs/accelerating-medicines-partnership-amp/amp-parkinsons-disease/) and [AMP PDRD](https://fnih.org/our-programs/accelerating-medicines-partnership-amp/parkinsons-disease-and-related-disorders/)
-    -   Data is hosted in the [AMP PDRD Portal](https://amp-pd.org/)\
+    -   Data is hosted in the [AMP PDRD Portal](https://amp-pd.org/)
 -   [AMP RA/SLE](https://fnih.org/our-programs/accelerating-medicines-partnership-amp/amp-rheumatoid-arthritis-and-lupus/https://fnih.org/our-programs/accelerating-medicines-partnership-amp/amp-rheumatoid-arthritis-and-lupus/)
     -   Data is hosted in the [ARK Portal](https://arkportal.synapse.org/)
 
 ## AMP Projects that are anticipated to have genetics and omics data within the SysBio FAIRplex funding period:
 
 -   [AMP AIM](https://fnih.org/our-programs/accelerating-medicines-partnership-amp/amp-autoimmune-immune-mediated-diseases/)
-    -   Data will be hosted in the [ARK Portal](https://arkportal.synapse.org/)\
+    -   Data will be hosted in the [ARK Portal](https://arkportal.synapse.org/)
 -   [AMP ALS](https://fnih.org/our-programs/accelerating-medicines-partnership-amp/amyotrophic-lateral-sclerosis/)
-    -   Data will be hosted in the [ALS Knowledge Portal](https://ampals.synapse.org/)\
--   [AMP HF]()\
+    -   Data will be hosted in the [ALS Knowledge Portal](https://ampals.synapse.org/)
+-   [AMP HF]()
 -   Data will be hosted in [BioData Catalyst](https://biodatacatalyst.nhlbi.nih.gov/) - see [AMP SCZ_AMP HF](https://docs.google.com/document/d/1nmyXcV8cfiWlaiD7LVOTF0PeTt3xPUpdWMvDKdKXaxo/edit?tab=t.0#heading=h.x7zvzhlqo74e)
 
 ## AMP Projects focusing on data other than genetics and omics:
@@ -690,8 +698,8 @@ Data curation is critical for transforming heterogeneous data into a harmonized,
 
 This section describes the outputs from the data harmonization and interoperability pipelines, which include:
 
--   Harmonized metadata describing datasets\
--   Interoperable participant-level data\
+-   Harmonized metadata describing datasets
+-   Interoperable participant-level data
 -   Standardized summary-level results from data analyses.
 
 The structure and content of these outputs are described in more detail in the [Data Output](?tab=t.3ddxfjyv3an) section.
@@ -702,10 +710,10 @@ A FAIRplex dataset is a set of files containing participant-level data of one or
 
 Dataset-level metadata is key to finding and cataloging data in FAIRplex and includes:
 
--   Searchable variables describing assays, biosamples, and disease focus\
--   Consent codes describing the data use limitations\
--   Relevant experimental documentation and analysis code\
--   Data location and provenance\
+-   Searchable variables describing assays, biosamples, and disease focus
+-   Consent codes describing the data use limitations
+-   Relevant experimental documentation and analysis code
+-   Data location and provenance
 -   Information about data access
 
 ## Interoperable individual-level data
@@ -720,16 +728,16 @@ Summary-level data derived from the analysis of harmonized or interoperable data
 
 Summary data contains the following data fields:
 
--   Provenance - the input dataset(s)\
--   Status - disease designation or control status\
--   Treatment - known interventional treatment group, particularly useful for AMPs with only disease cases or trial-relevant data\
--   Tissue - analyte sample was extracted from, generally isolated DNA/RNA, whole blood, mononucleocytes, or a brain region\
--   Cell type - cell type annotated via omic clustering methods (i.e. uniform manifold approximation and projection)\
--   Beta - from linear or logistic regression\
--   Standard error - from linear or logistic regression\
--   P value - from linear or logistic regression\
--   Test - either the gene or genetic variant name of interest\
--   PC1-PC10 - principal component vector loadings\
+-   Provenance - the input dataset(s)
+-   Status - disease designation or control status
+-   Treatment - known interventional treatment group, particularly useful for AMPs with only disease cases or trial-relevant data
+-   Tissue - analyte sample was extracted from, generally isolated DNA/RNA, whole blood, mononucleocytes, or a brain region
+-   Cell type - cell type annotated via omic clustering methods (i.e. uniform manifold approximation and projection)
+-   Beta - from linear or logistic regression
+-   Standard error - from linear or logistic regression
+-   P value - from linear or logistic regression
+-   Test - either the gene or genetic variant name of interest
+-   PC1-PC10 - principal component vector loadings
 -   N - count of samples in the analysis
 
 A brief summary of the most common data formats per modality is as follows:
@@ -767,8 +775,8 @@ Clinical data is dataset specific in many cases and cannot be reprocessed in the
 
 The initial focus of omics data standardization will be on three data modalities (these may be expanded on over time).
 
--   Transcriptomics (bulk RNA sequencing or pseudobulk stratified by cell type for single cell or single nucleus)\
--   Targeted and untargeted proteomics (from mass spectrometry or arrays)\
+-   Transcriptomics (bulk RNA sequencing or pseudobulk stratified by cell type for single cell or single nucleus)
+-   Targeted and untargeted proteomics (from mass spectrometry or arrays)
 -   Genetics (from whole genome sequencing or imputed array data).
 
 Depending on the availability of either raw data in standard formats (CRAM, iDat, FASTQ) or data processed into gene expression counts or variant calls, data will be either harmonized or made interoperable. The outputs in either case include PLINK2 binary format for genetic data and counts tables per gene or other functional unit for other omics. For each dataset, notebooks containing code for the harmonization or interoperability work will be provided through FAIRkit and FAIRgit.
@@ -789,8 +797,8 @@ Summary-level data is aggregate data summarized across multiple research partici
 
 Examples of summary-level data include:
 
--   Differential expression of harmonized transcriptomics datasets (prioritizing bulk and single cell transcriptomics), which will be carried out using appropriate covariates and standard logistic regression models for all combinations of case/control and treated/untreated status across and within each dataset.\
--   Principal component loading per sample, to help visualize the proximity of each dataset to the others within the same numeric projection.\
+-   Differential expression of harmonized transcriptomics datasets (prioritizing bulk and single cell transcriptomics), which will be carried out using appropriate covariates and standard logistic regression models for all combinations of case/control and treated/untreated status across and within each dataset.
+-   Principal component loading per sample, to help visualize the proximity of each dataset to the others within the same numeric projection.
 -   GWAS associations summarizing SNP coefficients for various traits in the dataset(s).
 
 Code used for the analysis will be provided to the public in FAIRkit and FAIRgit to deploy and adapt. In addition, other upcoming data wrangling and analysis tooling will be available in Year 2 to facilitate easy meta-analyses across summary-level data provided by the FAIRplex team.
