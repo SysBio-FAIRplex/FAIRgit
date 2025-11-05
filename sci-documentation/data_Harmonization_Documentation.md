@@ -232,24 +232,22 @@ genotypes = read_plink1_bin('harmonized_20250915/genetics/imputed_data.pgen')
 
 Sarah runs a meta-analysis across ROSMAP and MSBB:
 ```
-
 from scipy.stats import ttest_ind
 import statsmodels.api as sm
 
 # Example: Gene-level t-tests (cases vs. controls)
 results = []
+
 for gene_idx in range(len(gene_ids)):
-rosmap_case = rosmap_counts$$clinical
-['diagnosis'$$=='AD', gene_idx]
-rosmap_ctrl = rosmap_counts$$clinical
-['diagnosis'$$=='NCI', gene_idx]
+rosmap_case = rosmap_counts$$clinical['diagnosis'$$=='AD', gene_idx]
+
+rosmap_ctrl = rosmap_counts$$clinical['diagnosis'$$=='NCI', gene_idx]
 
 t_stat, p_val= ttest_ind(rosmap_case, rosmap_ctrl)  
 results.append({'gene': gene_ids\[gene_idx\], 't': t_stat, 'p': p_val})
-
 results_df = pd.DataFrame(results)
-
 ```
+
 Because data is **z-transformed**, effect sizes are comparable across studies. Sarah identifies 342 genes with FDR \< 0.05, enriched for: - Inflammatory pathways (IL6, TNF signaling) - Microglial activation (TREM2, CD33)
 
 **Step 3: Cross-Disease Comparison**
@@ -265,13 +263,18 @@ Sarah repeats the analysis with AMP PD and AMP RA/SLE data, leveraging the **sam
 
 Sarah publishes her analysis code to FAIRgit:
 
-Repository: SysBio-FAIRPlex/inflammatory-signatures-AD-PD-RA\
-├── README.md\
-├── cohort_manifest.json \# if able to be shared, pending discussion\
-├── differential_expression.R\
-├── pathway_enrichment.py\
-└── figures/\
+<details>
+<summary><strong>📁 SysBio-FAIRPlex/inflammatory-signatures-AD-PD-RA\/</strong></summary>
+
+```
+├── README.md
+├── cohort_manifest.json # if able to be shared, pending discussion
+├── differential_expression.R
+├── pathway_enrichment.py
+└── figures
 └── volcano_plot.png
+```
+</details>
 
 Her summary statistics are also uploaded to the **SysBio Portal** for public visualization.
 
@@ -317,23 +320,23 @@ This CDE will be mirrored to the **NLM CDE Repository** for future reuse and int
 
 James runs a Python script to transform his clinical data into OMOP CDM format:
 ```
-*\# Map to PERSON table*\
-person_df = pd.DataFrame({\
-'person_id': ibd_data$$'SubjectID'$$,\
-'birth_datetime': 2025 - ibd_data$$'PatientAge'$$, *\# Derive from age*\
-'gender_concept_id': ibd_data$$'Gender'$$.map({'M': 8507, 'F': 8532}),\
-'race_concept_id': ibd_data$$'Race'$$.map(race_mapping)\
+# Map to PERSON table
+
+person_df = pd.DataFrame({
+'person_id': ibd_data$$'SubjectID'$$,'birth_datetime': 2025 - ibd_data$$'PatientAge'$$, # Derive from age
+'gender_concept_id': ibd_data$$'Gender'$$.map({'M': 8507, 'F': 8532}),
+'race_concept_id': ibd_data$$'Race'$$.map(race_mapping)
 })
 
-*\# Map to CONDITION_OCCURRENCE*\
-condition_df = pd.DataFrame({\
-'person_id': ibd_data$$'SubjectID'$$,\
-'condition_concept_id': 201606, *\# SNOMED: Crohn's disease*\
-'condition_start_date': ibd_data$$'DiagnosisDate'$$,\
-'condition_source_value': 'IBD'\
+# Map to CONDITION_OCCURRENCE*
+condition_df = pd.DataFrame({
+'person_id': ibd_data$$'SubjectID'$$,
+'condition_concept_id': 201606, # SNOMED: Crohn's disease
+'condition_start_date': ibd_data$$'DiagnosisDate'$$,
+'condition_source_value': 'IBD'
 })
 
-*\# Save as HDF5*\
+# Save as HDF5
 person_df.to_hdf('clinical_meta/tabular_data.hdf', key='X_clinical')
 ```
 ### **Phase 3: Genetics Data Harmonization**
@@ -342,29 +345,29 @@ James’ WGS data is in VCF format with non-standardized variant IDs. He uses th
 
 #### *Step 1: Variant Standardization*
 ```
-*\# Convert to PLINK2 with standardized naming*\
-plink2 --vcf ibd_wgs.vcf.gz **\\**\
---set-all-var-ids '\@:#:$r:$a' **\\**\
---new-id-max-allele-len 100 **\\**\
---make-pgen **\\**\
+# Convert to PLINK2 with standardized naming
+plink2 --vcf ibd_wgs.vcf.gz
+--set-all-var-ids '\@:#:$r:$a'
+--new-id-max-allele-len 100
+--make-pgen
 --out X_standardized
 
-*\# Output: X_standardized.pgen (PLINK2 binary)*\
-*\# Variants now named: chr1_12345_A_G (not rs123456)*
+# Output: X_standardized.pgen (PLINK2 binary)
+# Variants now named: chr1_12345_A_G (not rs123456)
 ```
 #### *Step 2: Quality Control and Imputation*
 
 Following the **CARD Unified Pipeline** as shown on FAIRkit’s genetics examples, James: 1. Filters variants (MAF \> 0.01, HWE p \> 1e-6, genotype call rate \> 95%) 2. Imputes missing genotypes using TOPMed reference panel 3. Generates principal components (PCs) to capture population structure
 ```
-*\# Save genetics metadata with covariates*\
-genetics_meta = pd.DataFrame({\
-'person_id': sample_ids,\
-'PC1': pcs$$:, 0$$,\
-'PC2': pcs$$:, 1$$,\
-*\# ... PC3-PC10*\
-'array_or_wgs': 'WGS',\
-'imputation_panel': 'TOPMed'\
-})\
+# Save genetics metadata with covariates
+genetics_meta = pd.DataFrame({
+'person_id': sample_ids,
+'PC1': pcs$$:, 0$$,
+'PC2': pcs$$:, 1$$,
+*\# ... PC3-PC10*
+'array_or_wgs': 'WGS',
+'imputation_panel': 'TOPMed'
+})
 genetics_meta.to_hdf('genetics/tabular_data.hdf', key='X_ibd_genetics')
 ```
 **Output Files**: - imputed_data.pgen: 10.3M variants in PLINK2 format - tabular_data.hdf: Metadata + PCs for covariate adjustment
@@ -377,19 +380,19 @@ James’ scRNA-seq data is in Seurat format (R object). He converts it to FAIRpl
 
 Using **Harmony** (a tool recommended in FAIRplex documentation), James integrates his dataset with existing intestinal scRNA-seq references:
 
-**library**(Seurat)\
-**library**(harmony)
+library(Seurat)
+library(harmony)
 ```
-*\# Load data*\
-seurat_obj \<- **readRDS**('ibd_scrna.rds')
+# Load data*
+seurat_obj <- **readRDS**('ibd_scrna.rds')
 
-*\# Harmonize with reference (e.g., AMP X intestinal atlas)*\
-seurat_obj \<- **RunHarmony**(seurat_obj, group.by.vars = 'dataset')
+# Harmonize with reference (e.g., AMP X intestinal atlas)
+seurat_obj <- **RunHarmony**(seurat_obj, group.by.vars = 'dataset')
 
-*\# Annotate cell types*\
-seurat_obj \<- **FindClusters**(seurat_obj, resolution = 0.5)\
-cell_types \<- **c**('T_cell', 'B_cell', 'Epithelial', 'Macrophage', ...)\
-seurat_obj$cell\_type \<- cell\_types\[seurat\_obj$seurat_clusters]
+# Annotate cell types
+seurat_obj <- FindClusters(seurat_obj, resolution = 0.5)
+cell_types <- ('T_cell', 'B_cell', 'Epithelial', 'Macrophage', ...)
+seurat_obj$cell_type <- cell_types[seurat_obj$seurat_clusters]
 ```
 #### *Step 2: Pseudobulking and Normalization*
 
@@ -397,20 +400,20 @@ James aggregates counts by cell type and normalizes:
 
 **library**(DESeq2)
 ```
-*\# Pseudobulk by cell type*\
-pseudobulk \<- **AggregateExpression**(seurat_obj,\
-group.by = **c**('person_id', 'cell_type'),\
+# Pseudobulk by cell type
+pseudobulk <- AggregateExpression**(seurat_obj,
+group.by = ('person_id', 'cell_type'),
 return.seurat = FALSE)
 
-*\# Normalize and z-transform*\
-dds \<- **DESeqDataSetFromMatrix**(countData = pseudobulk,\
-colData = metadata,\
-design = \~ diagnosis)\
-dds \<- **estimateSizeFactors**(dds)\
-normalized_counts \<- **counts**(dds, normalized=TRUE)
+# Normalize and z-transform
+dds <- DESeqDataSetFromMatrix**(countData = pseudobulk,
+colData = metadata,
+design = ~ diagnosis)
+dds <- estimateSizeFactors**(dds)
+normalized_counts <- counts(dds, normalized=TRUE)
 
-*\# Z-transform (mean=0, SD=1) for interoperability*\
-z_transformed \<- **scale**(**log2**(normalized_counts + 1))
+# Z-transform (mean=0, SD=1) for interoperability
+z_transformed <-scale(log2(normalized_counts + 1))
 ```
 **Why Z-transformation?** - Ensures **same numeric scale** across datasets (critical for meta-analysis) - Accounts for technical variation (batch effects, sequencing depth) - Enables direct comparison with existing FAIRplex datasets
 
@@ -418,9 +421,10 @@ z_transformed \<- **scale**(**log2**(normalized_counts + 1))
 ```
 import h5py
 
-**with** h5py.File('cell_omics/tabular_data.hdf', 'w') as f:\
-f.create_dataset('X_ibd_intestine_tcells', data=z_transformed$$'T\_cell'$$)\
-f.create_dataset('aim_ibd_intestine_macrophages', data=z_transformed$$'Macrophage'$$)\
+withh5py.File('cell_omics/tabular_data.hdf', 'w') as f:
+f.create_dataset('X_ibd_intestine_tcells', data=z_transformed$$'T_cell'$$)
+
+f.create_dataset('aim_ibd_intestine_macrophages', data=z_transformed$$'Macrophage'$$)
 f.create_dataset('gene_ensembl_ids', data=gene_ids)
 ```
 ### **Phase 5: Summary Statistics Generation**
@@ -431,41 +435,41 @@ James runs standard analyses to generate summary-level data for the **SysBio Por
 ```
 from scipy.stats import ttest_ind
 
-*\# Compare IBD cases vs. controls (T cells)*\
-results = []\
-**for** gene **in** gene_ids:\
-case_expr = z_transformed$$'T\_cell'$$$$metadata\['diagnosis'$$=='IBD', gene]\
-ctrl_expr = z_transformed$$'T\_cell'$$$$metadata\['diagnosis'$$=='Control', gene]
+# Compare IBD cases vs. controls (T cells)
+results = []
+for gene **in** gene_ids:
+    case_expr = z_transformed$$'T_cell'$$$$metadata['diagnosis'$$=='IBD', gene]
+    ctrl_expr = z_transformed$$'T_cell'$$$$metadata['diagnosis'$$=='Control', gene]
 
         
-beta, se, p\_val \= ttest\_ind(case\_expr, ctrl\_expr)  
-results.append({  
-    'gene': gene,  
-    'cell\_type': 'T\_cell',  
-    'tissue': 'intestine',  
-    'beta': beta,  
-    'se': se,  
-    'p\_value': p\_val,  
-    'n\_cases': len(case\_expr),  
-    'n\_controls': len(ctrl\_expr),  
-    'dataset': 'X\_IBD'  
-})
+    beta, se, p_val = ttest_ind(case_expr, ctrl_expr)  
+        results.append({  
+        'gene': gene,  
+        'cell_type': 'T_cell',  
+        'tissue': 'intestine',  
+        'beta': beta,  
+        'se': se,  
+        'p_value': p_val,  
+        'n_cases': len(case_expr),  
+        'n_controls': len(ctrl_expr),  
+        'dataset': 'X_IBD'  
+    })
 
-*\# Save to HDF5*\
-results_df = pd.DataFrame(results)\
-results_df.to_hdf('summary_20250915/cell_omics/differential_expression.hdf',\
+# Save to HDF5*
+results_df = pd.DataFrame(results)
+results_df.to_hdf('summary_20250915cell_omicsdifferential_expression.hdf',
 key='X_ibd_tcell_de')
 ```
 #### *GWAS*
 ```
-*\# Run PLINK2 association test*\
-plink2 --pgen ibd_standardized.pgen **\\**\
---pheno ibd_phenotype.txt **\\**\
---covar genetics_covariates.txt **\\**\
---glm **\\**\
+# Run PLINK2 association test
+plink2 --pgen ibd_standardized.pgen 
+--pheno ibd_phenotype.txt 
+--covar genetics_covariates.txt 
+--glm 
 --out ibd_gwas
 
-*\# Convert to HDF5*\
+# Convert to HDF5
 python convert_gwas_to_hdf5.py ibd_gwas.assoc.glm
 ```
 **Summary Data Schema** (compatible with SysBio Portal):
@@ -493,8 +497,8 @@ Dear Team,
 Please find the harmonized AIM_IBD dataset, now interoperable with\
 FAIRplex standards:
 
-1\. Clinical data: OMOP CDM format (2,340 participants)\
-2. Genetics: PLINK2 format with standardized variant naming (10.3M variants)\
+1. Clinical data: OMOP CDM format (2,340 participants)
+2. Genetics: PLINK2 format with standardized variant naming (10.3M variants)
 3. Single-cell RNA-seq: HDF5 format with pseudobulked, z-transformed counts
 
 Data location: gs://fairplex-amp-X/harmonized_ibd_20250915/
@@ -503,23 +507,29 @@ Summary statistics are now live in the SysBio Portal for public exploration.
 
 Code and documentation: <https://github.com/SysBio-FAIRPlex/X-ibd-harmonization>
 
-Best regards,\
+Best regards,
 James Rodriguez
 
 ### **Phase 7: Code Sharing via FAIRgit**
 
 James publishes his harmonization pipeline to FAIRgit:
 
-Repository: SysBio-FAIRPlex/X-ibd-harmonization\
-├── README.md\
-├── clinical_cde_mapping.json\
-├── genetics_pipeline.sh\
-├── scrna_pseudobulk.R\
-├── summary_statistics.py\
-└── notebooks/\
-├── 01_clinical_omop_transform.ipynb\
-├── 02_genetics_qc_imputation.ipynb\
+<details>
+<summary><strong>📁 SysBio-FAIRPlex/X-ibd-harmonization/</strong></summary>
+
+```
+├── README.md
+├── clinical_cde_mapping.json
+├── genetics_pipeline.sh
+├── scrna_pseudobulk.R
+├── summary_statistics.py
+└── notebooks/
+├── 01_clinical_omop_transform.ipynb
+├── 02_genetics_qc_imputation.ipynb
 └── 03_scrna_harmony_integration.ipynb
+```
+</details>
+
 
 **Key Pipeline Outputs**:
 
@@ -568,7 +578,7 @@ Person (OMOP) ───┬─── Condition_Occurrence\
 ├─── Specimen ──── omics_table ──── HDF5 (omics data)\
 └─── genetics_table ──── PLINK2 (genotypes)
 
-This enables queries like: \> “Find all participants with APOE4 genotype, Braak stage 5-6, and differential expression of TREM2 in microglia”
+This enables queries like: > “Find all participants with APOE4 genotype, Braak stage 5-6, and differential expression of TREM2 in microglia”
 
 ------------------------------------------------------------------------
 
@@ -712,6 +722,7 @@ This section describes the outputs from the data harmonization and interoperabil
 
 The structure and content of these outputs are described in more detail in the [Data Output](?tab=t.3ddxfjyv3an) section.
 
+
 ## Dataset-level metadata
 
 A FAIRplex dataset is a set of files containing participant-level data of one or more data modalities that meet a specific governance requirement.
@@ -843,57 +854,26 @@ Due to the computationally intensive nature of processing raw omics data the foc
 
 SysBio data pipelines process data from source AMP data into a file hierarchy containing harmonized row-level and summary data for each data modality.
 
-### High-level ETL
+#### 📦 Harmonized Layer (raw standardized data)
 
-*┌─────────────────────────────────────────────────────────┐*\
-*│ DATA DIRECTORY STRUCTURE │*\
-*└─────────────────────────────────────────────────────────┘*
+| Folder | Contents | Format(s) | Notes |
+|--------|----------|-----------|-------|
+| `clinical_meta/` | `tabular_data.hdf`, `read_me.txt` | HDF5 | Clinical metadata (CDE-aligned) |
+| `bulk_omics/` | `tabular_data.hdf`, `read_me.txt` | HDF5 | Bulk RNA-seq, tissue annotated |
+| `cell_omics/` | `tabular_data.hdf`, `read_me.txt` | HDF5 | Single-cell pseudobulk counts |
+| `genetics/` | `tabular_data.hdf`, `imputed_data.pgen`, `joint_call.pgen`, `annotation.vcf`, `read_me.txt` | HDF5, PLINK2, VCF | Imputed + joint-called genotypes |
 
-*📁 harmonized\_*$$date of release$$/\
-*├── clinical_meta/*\
-*│ ├── tabular_data.hdf \# Clinical metadata in HDF5 format leveraging CDEs*\
-*│ └── read_me.txt*\
-*│*\
-*├── bulk_omics/*\
-*│ ├── tabular_data.hdf \# Bulk omics data in HDF5 format annotating tissue and CDEs, bulked counts*\
-*│ └── read_me.txt*\
-*│*\
-*├── cell_omics/*\
-*│ ├── tabular_data.hdf \# Single-cell omics data in HDF5 format annotating cell types and CDEs, pseudobulked counts*\
-*│ └── read_me.txt*\
-*│*\
-*└── genetics/*\
-*├── tabular_data.hdf \# Genetic data in HDF5 format with variant annotations focusing on common covariate CDEs*\
-*├── imputed_data.pgen \# Imputed genotype data in PLINK format, industry standard for analysis*\
-*├── joint_call.pgen \# Joint-called genotype data in PLINK format from genome sequencing*\
-*├── annotation.vcf \# Variant annotations in VCF format from genome sequencing*\
-*└── read_me.txt*
+---
 
-*📁 summary\_*$$date of release$$/\
-*├── bulk_omics/*\
-*│ ├── read_me.txt*\
-*│ ├── PCA.hdf \# Principal Component Analysis results in HDF5 format*\
-*│ ├── networks.hdf \# Network analysis results in HDF5 format*\
-*│ └── differential_expression.hdf \# Differential expression results in HDF5 format for dozens of phenotypes compared*\
-*│*\
-*├── cell_omics/*\
-*│ ├── read_me.txt*\
-*│ ├── PCA.hdf \# Principal Component Analysis results in HDF5 format*\
-*│ ├── networks.hdf \# Network analysis results in HDF5 format*\
-*│ └── differential_expression.hdf \# Differential expression results in HDF5 format for dozens of phenotypes compared*\
-*│*\
-*└── genetics/*\
-*│ ├── read_me.txt*\
-*│ ├── PCA.hdf \# Principal Component Analysis results in HDF5 format*\
-*│ └── GWAS.hdf \# Genome-Wide Association Study results in HDF5 format for dozens of phenotypes analyzed*\
-*│*\
-*├── browsers/*\
-*\| ├── read_me.txt*\
-*\| └── external_links.txt \# Links to interactive data browsers for exploring the datasets, primarily SysBio Portal*\
-*│*\
-*└── tools_utils/*\
-*├── read_me.txt*\
-*└── external_links.txt \# Links to tools and utilities for data analysis and visualization, i.e. Harmony for scRNA-seq*
+### 📊 Summary Layer (precomputed analysis outputs)
+
+| Folder | Contents | Format(s) | Notes |
+|--------|----------|-----------|-------|
+| `bulk_omics/` | `PCA.hdf`, `networks.hdf`, `differential_expression.hdf`, `read_me.txt` | HDF5 | PCA, network models, DE results |
+| `cell_omics/` | same as above | HDF5 | Cell-type level analytics |
+| `genetics/` | `PCA.hdf`, `GWAS.hdf`, `read_me.txt` | HDF5 | PCA + GWAS summary stats |
+| `browsers/` | `external_links.txt`, `read_me.txt` | text | Links to SysBio Portal, etc. |
+| `tools_utils/` | `external_links.txt`, `read_me.txt` | text | Companion tools (Harmony, etc.) |
 
 User friendly naming conventions and file formats have been prioritized to lower activation energy for analyses. All HDF5 format files will contain multiple levels of key designated data frames, a majority of which will be counts tables from various omics technologies. The keys will be clearly described in the readme files and will also be named using a user friendly / self-describing style.
 
