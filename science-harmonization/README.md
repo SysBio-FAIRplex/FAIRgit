@@ -5,4 +5,5 @@ This documentation describes the SysBio FAIRplex data landscape, data processing
 
 [^merged_core_dti_docs-10]: [https://docs.google.com/document/d/1Im4XDBghVmgdPPercQi4Vg1aODB6kbfam1h10zqTHIM/edit?tab=t.g9ozssacnemv\\#heading=h.gwp92a45r22t](https://docs.google.com/document/d/1Im4XDBghVmgdPPercQi4Vg1aODB6kbfam1h10zqTHIM/edit?tab=t.g9ozssacnemv\#heading=h.gwp92a45r22t){.uri}
 
+## Team Content Structure
 See the “In Practice” doc for details on how to operationalize the practices in development by the team, and the SysBio-FAIRplex Definitions for description of terms (add url once merged with main).
