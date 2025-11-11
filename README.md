@@ -1,7 +1,7 @@
 # FAIRgit - The SysBio-FAIRPlex GitHub Organization Structure and Standards
 
 This is a standard setting document for all github repos coming on to the SysBio-FAIRplex ecosystem.
-All technical documentation and publicly shareable artifacts will be published here and minted with DOIs at milestones of substantial revision.
+All technical documentation and publicly shareable artifacts will be published here and <a href="https://docs.github.com/en/repositories/archiving-a-github-repository/referencing-and-citing-content">minted with DOIs</a> at milestones of substantial revision.
 Everything from code for analyses to data inventories and even lab documentation should be pushlished to this github organization as part of our efforts to maximize transparency and reproducibility.
 Let's go **open science**!
 
@@ -15,7 +15,7 @@ FAIRgit serves as the central GitHub organization for the SysBio FAIRplex Projec
 
 ### Team-Based Repository Organization
 
-The FAIRgit organization is structured around seven primary areas, each corresponding to the specialized teams within the SysBio FAIRplex Project:
+The FAIRgit organization is structured around eight primary areas, seven corresponding to the specialized teams within the SysBio-FAIRplex Project and one for general content:
 
 #### 1. Prime Platforms (`prime-platforms/`)
 - **Purpose**: Core infrastructure and foundational platforms
@@ -51,6 +51,11 @@ The FAIRgit organization is structured around seven primary areas, each correspo
 - **Purpose**: Forked repositories and collaborative spaces for external partners
 - **Repository naming**: `collab-*`, `external-*`, or `partner-*`
 - **Access**: Approved external collaborators + project liaisons
+
+#### 8. General SysBio-FAIRplex (`general/`)
+- **Purpose**: General documentation used across all SysBio-FAIRplex teams 
+- **Repository naming**: `general-*`
+- **Access**: SysBio-FAIRplex teams
 
 ## Management and Governance
 
