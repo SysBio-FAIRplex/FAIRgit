@@ -70,7 +70,7 @@ The SysBio CDM will link to the HDF5 file path, establishing the connection betw
 
 **Mapping Table – PERSON**
 
-| AMP Data Element(s)(Direct from AMPs) | Description | Mapping Details |
+| AMP Data Element(s)-(Direct from AMPs) | Description | Mapping Details |
 |------------------------|------------------------|------------------------|
 | **age** | Patient age at time of recording | Used to derive birth year or age groups |
 | **age_at_diagnosis** | Patient’s age at time of diagnosis | Used to derive passage of time from diagnosis to point of data recording |
@@ -108,7 +108,7 @@ The SysBio CDM will link to the HDF5 file path, establishing the connection betw
 
 **Mapping Table – CONDITION_OCCURRENCE**
 
-| AMP Data Element(s)(Direct from AMPs) | Description | Mapping Details |
+| AMP Data Element(s)-(Direct from AMPs) | Description | Mapping Details |
 |------------------------|------------------------|------------------------|
 | **afib, angina, diabetes, parkinsonism, stroke** | Clinical diagnoses and conditions | Each condition mapped to a standardized concept ID |
 | **diagnosis, diagnosis_type** | Detailed diagnosis descriptions | Populated as condition source value |
@@ -124,7 +124,7 @@ The SysBio CDM will link to the HDF5 file path, establishing the connection betw
 
 **Mapping Table – DRUG_EXPOSURE**
 
-| AMP Data Element(s)(Direct from AMPs) | Description | Mapping Details |
+| AMP Data Element(s)-(Direct from AMPs) | Description | Mapping Details |
 |------------------------|------------------------|------------------------|
 | **antideprmed, diabeticmed, heartmed** | Medication flags (antidepressants, diabetic, cardiac) | Mapped to OMOP drug concept IDs |
 | **med_desc\_*, med_dose\_*, med_route\_\*\**, med_unit\_*** | Detailed medication descriptors and dosages | Source fields used for prescription details |
@@ -141,7 +141,7 @@ The SysBio CDM will link to the HDF5 file path, establishing the connection betw
 
 **Mapping Table – MEASUREMENT**
 
-| AMP Data Element(s)(Direct from AMPs) | Description | Mapping Details |
+| AMP Data Element(s)-(Direct from AMPs) | Description | Mapping Details |
 |------------------------|------------------------|------------------------|
 | **chol, HDL, Trig, LDL, bpmed, bmi, bmi_cat** | Laboratory values and vital signs | Each mapped to measurement concepts and units |
 | **mds_updrs\_*, CATscores\_*, CESD, mmse, moca_total_score, pdq39\_\*** | Cognitive and clinical assessment scores | Stored with measurement_date and value details |
@@ -157,7 +157,7 @@ The SysBio CDM will link to the HDF5 file path, establishing the connection betw
 
 **Mapping Table – OBSERVATION**
 
-| AMP Data Element(s)(Direct from AMPs) | Description | Mapping Details |
+| AMP Data Element(s)-(Direct from AMPs) | Description | Mapping Details |
 |------------------------|------------------------|------------------------|
 | **App_version, AppVersion, acknowledgmentStatement, acquisitionMethodType** | Application and administrative metadata | Mapped as observation source value |
 | **attention, attention2, memory_loss** | Survey responses or clinical observations | Stored with observation_date and value as text/number |
@@ -173,7 +173,7 @@ The SysBio CDM will link to the HDF5 file path, establishing the connection betw
 
 **Mapping Table – SPECIMEN**
 
-| AMP Data Element(s)(Direct from AMPs) | Description | Mapping Details |
+| AMP Data Element(s)-(Direct from AMPs) | Description | Mapping Details |
 |------------------------|------------------------|------------------------|
 | biospecimenType, specimenID, sample_id, Plate_ID | Biospecimen identifiers and type information | Mapped as primary specimen attributes |
 | sampleBatch, Sample_Type, Sample_Description | Additional specimen collection details | Included as specimen source value or extension fields |
@@ -187,7 +187,7 @@ The SysBio CDM will link to the HDF5 file path, establishing the connection betw
 
 **Mapping Table – FACT_RELATIONSHIP / Metadata**
 
-| AMP Data Element(s)(Direct from AMPs) | Description | Mapping Details |
+| AMP Data Element(s)-(Direct from AMPs) | Description | Mapping Details |
 |------------------------|------------------------|------------------------|
 | ROW_ID, ROW_VERSION, parentId, duplicateID | Relationship identifiers and versioning | Used to maintain referential integrity across domains |
 | metadataType, createdBy, modifiedBy, modifiedOn | Audit and provenance information | Stored in accompanying audit tables or as part of each record’s metadata |
