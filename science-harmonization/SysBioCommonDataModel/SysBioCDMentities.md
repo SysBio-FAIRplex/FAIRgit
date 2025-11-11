@@ -92,7 +92,7 @@ The SysBio CDM will link to the HDF5 file path, establishing the connection betw
 
 **Mapping Table – VISIT_OCCURRENCE**
 
-| AMP Data Element(s)(Direct from AMPs) | Description | Mapping Details |
+| AMP Data Element(s)-(Direct from AMPs) | Description | Mapping Details |
 |------------------------|------------------------|------------------------|
 | **visit, visit_id, unifiedVisit** | Unique visit identifiers | Primary key in VISIT_OCCURRENCE |
 | **visit_name, visit_month** | Visit type and timing information | Mapped to visit attributes |
