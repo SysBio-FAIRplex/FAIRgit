@@ -8,18 +8,6 @@ This section describes the outputs from the data harmonization and interoperabil
 -   Interoperable participant-level data
 -   Standardized summary-level results from data analyses.
 
-The structure and content of these outputs are described in more detail 
-
-# Data Curation
-
-Data curation is critical for transforming heterogeneous data into a harmonized, analysis-ready resource. This process ensures data is FAIR, enabling researchers to leverage the full potential of the data accessible via the FAIRplex platform.
-
-This section describes the outputs from the data harmonization and interoperability pipelines, which include:
-
--   Harmonized metadata describing datasets
--   Interoperable participant-level data
--   Standardized summary-level results from data analyses.
-
 The structure and content of these outputs are described in more detail in the Data Output section.
 
 
