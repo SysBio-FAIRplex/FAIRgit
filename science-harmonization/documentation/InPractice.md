@@ -111,7 +111,7 @@ The search returns 7 datasets similar to below:
 | A | AMP AD | Alzheimer’s | Genomics, Genetics, Clinical | Brain | Controlled |
 | B | AMP AD | Alzheimer’s | Genomics, Genetics | Brain | Controlled |
 | C | AMP PD | Parkinson’s | Genomics, Genetics | Brain, Blood | Controlled |
-| D | AMP RA/SLE | RA | Genomics, Genetics | Blood | Controlled |
+| D | AMP RA/SLE | Rheumatoid Arthritis | Genomics, Genetics | Blood | Controlled |
 
 Each dataset displays: - **Consent codes** via GA4GH DUO terms - **Sample counts** stratified by case/control - **Common Data Elements** available (age, sex, disease duration, APOE genotype, etc.) - **Data location** (AMP portal + FAIRplex bucket)
 
