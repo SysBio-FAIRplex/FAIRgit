@@ -32,6 +32,5 @@ Ther initial focus is on the AMP Projects with genetics and omics (bulk and sing
 -   [AMP ALS](https://fnih.org/our-programs/accelerating-medicines-partnership-amp/amyotrophic-lateral-sclerosis/)
     -   Data is hosted in the [ALS Knowledge Portal](https://ampals.synapse.org/)
 -   [AMP HF]()
--   Data will be hosted in [BioData Catalyst](https://biodatacatalyst.nhlbi.nih.gov/) - see [AMP SCZ_AMP HF](https://docs.google.com/document/d/1nmyXcV8cfiWlaiD7LVOTF0PeTt3xPUpdWMvDKdKXaxo/edit?tab=t.0#heading=h.x7zvzhlqo74e)
--   [AMP SCZ](https://www.ampscz.org/)
+    -   Data will be hosted in [BioData Catalyst](https://biodatacatalyst.nhlbi.nih.gov/)
     -   Data is hosted in [NIMD Data Archive](https://nda.nih.gov/)
