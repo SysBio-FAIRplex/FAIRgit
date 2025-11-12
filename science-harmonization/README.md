@@ -8,7 +8,7 @@ See the documentation for a description of the SysBio FAIRplex data landscape, d
 ## Content Structure
 <a href="https://github.com/SysBio-FAIRplex/FAIRgit/tree/main/science-harmonization/documentation">Ducumentation</a>
  - As a start, see the <a href="https://github.com/SysBio-FAIRplex/FAIRgit/blob/main/science-harmonization/documentation/InPractice.md">In Practice</a> doc for examples of how we envision the CDM operationalizing the SysBio-FAIRplex User Journey
- - See a summery of the <a href="https://github.com/SysBio-FAIRplex/FAIRgit/blob/main/science-harmonization/documentation/TheDataLandscape.md">AMP data landscape</a>
+ - See a summary of the <a href="https://github.com/SysBio-FAIRplex/FAIRgit/blob/main/science-harmonization/documentation/TheDataLandscape.md">AMP data landscape</a>
  - Read about <a href="https://github.com/SysBio-FAIRplex/FAIRgit/blob/staging-sci-data_harmonization_docs/main/FAIRkit.md">FAIRkit</a>
  - See a description of <a href="https://github.com/SysBio-FAIRplex/FAIRgit/blob/main/science-harmonization/documentation/DataInputOutput.md">data harmonization methods and outputs</a>
 
