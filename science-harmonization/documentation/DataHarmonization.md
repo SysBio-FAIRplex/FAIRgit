@@ -66,15 +66,9 @@ The primary goal of the data wrangling in the context of interoperability and ha
 
 # Clinical data
 
-Built into FAIRkit is a resource of over 100K common data elements (CDEs), including clinical, demographic, experimental, and governance-related data fields[^merged_core_dti_docs-14]. While NLM vetted CDEs are foundational to this resource, novel CDEs that do not overlap with existing National Library of Medicine CDEs will be indexed at NLM’s repository in the future to contribute to public knowledge resources and set a standard for upcoming research[^merged_core_dti_docs-15]. CDEs will be organized to represent topics specifically labeled for easy findability, with these labels referred to as “collections” in the FAIRkit browser. All CDEs that appear in multiple datasets (\> 1) that have been ingested by the FAIRplex team will be annotated as part of this collection, bespoke fields occurring in only one dataset will not be browsable in this iteration of FAIRkit but this may change based on ongoing user feedback.
+Built into FAIRkit is <a href="https://www.medrxiv.org/content/10.1101/2024.10.17.24315618v1">a resource of over 100K common data elements (CDEs)</a>, including clinical, demographic, experimental, and governance-related data fields. While NLM vetted CDEs are foundational to this resource, novel CDEs that do not overlap with existing National Library of Medicine CDEs will be indexed at <a href="https://cde.nlm.nih.gov/home">NLM’s CDE repository</a> in the future to contribute to public knowledge resources and set a standard for upcoming research. CDEs will be organized to represent topics specifically labeled for easy findability, with these labels referred to as “collections” in the FAIRkit browser. All CDEs that appear in multiple datasets (\> 1) that have been ingested by the FAIRplex team will be annotated as part of this collection, bespoke fields occurring in only one dataset will not be browsable in this iteration of FAIRkit but this may change based on ongoing user feedback.
 
-[^merged_core_dti_docs-14]: <https://fairkit-498260019893.us-central1.run.app/?state=1826fc0b-bad3-4704-aa14-5b498d4c8247>
-
-[^merged_core_dti_docs-15]: <https://www.nature.com/articles/npre.2009.3482.1>
-
-Each CDE entry contains aliases from published datasets and literature as well as expected values per data field represented by the CDE. CDEs have been modified to be explicit in their naming as opposed to ICD10 codes or similar abbreviations. Clinical, demographic, experimental and governance related CDEs representing data fields from FAIRplex connected studies are audited using an AI-assisted human-in-the-loop protocol to validate content and representativeness. All CDEs will be OMOP compliant whenever possible, following NLM CDE conventions [^merged_core_dti_docs-16].
-
-[^merged_core_dti_docs-16]: <https://www.ohdsi.org/data-standardization/>
+Each CDE entry contains aliases from published datasets and literature as well as expected values per data field represented by the CDE. CDEs have been modified to be explicit in their naming as opposed to ICD10 codes or similar abbreviations. Clinical, demographic, experimental and governance related CDEs representing data fields from FAIRplex connected studies are audited using an AI-assisted human-in-the-loop protocol to validate content and representativeness. All CDEs will be OMOP compliant whenever possible, following <a href="https://www.ohdsi.org/data-standardization/">NLM CDE conventions</a>.
 
 Clinical data is dataset specific in many cases and cannot be reprocessed in the same way as \*-omic or genetic data. In this case, FAIRkit will flag values outside of the tolerance levels of established CDEs for manual curation and alteration on a case-by-case basis.
 
@@ -94,9 +88,7 @@ Creating interoperable datasets has three goals: (1) variables should have the s
 
 Genetic data (from arrays and sequencing) is standardized to dosages of alternate alleles from the reference sequence (gr38) and columns are annotated in the $CHR\_$POS\_$REF\_$ALT format as rsIDs and other nomenclature can be non-specific or redundant. These take the form of PLINK2 binaries.
 
-For transcriptomics and proteomics, normalized counts tables are provided with unique sample IDs. These normalized counts are aggregated on the gene level and appended with ENSEMBL gene IDs, as they are unique and specific. These normalized counts are surveyed for skewness and kurtosis in an automated manner and reviewed by analysts. When necessary, to normalize the data log transformations are undertaken. Residualization via linear regression is used to account for dataset-level covariates such as batch, chemistry, or cell composition, etc on a case-by-case basis for statistical adjustment. Normalized and adjusted data is then z-transformed with either case and/or control groups per dataset as a reference point to scale the data into a uniform numeric space. Principal components analysis of all interoperable omics data is used to generate an additional FAIRplex-specific set of covariates, with 10 component loadings to be available for use in analyses across data sources. Counts data and principal components take the form of tabular data easily readable in R or python housed alongside additional participant-level metadata in dataset-specific HDF files discussed later in the Data Modeling vignette. Industry standard packages such as Harmony[^merged_core_dti_docs-17] will be leveraged for this processing.
-
-[^merged_core_dti_docs-17]: <https://www.nature.com/articles/s41592-019-0619-0>
+For transcriptomics and proteomics, normalized counts tables are provided with unique sample IDs. These normalized counts are aggregated on the gene level and appended with ENSEMBL gene IDs, as they are unique and specific. These normalized counts are surveyed for skewness and kurtosis in an automated manner and reviewed by analysts. When necessary, to normalize the data log transformations are undertaken. Residualization via linear regression is used to account for dataset-level covariates such as batch, chemistry, or cell composition, etc on a case-by-case basis for statistical adjustment. Normalized and adjusted data is then z-transformed with either case and/or control groups per dataset as a reference point to scale the data into a uniform numeric space. Principal components analysis of all interoperable omics data is used to generate an additional FAIRplex-specific set of covariates, with 10 component loadings to be available for use in analyses across data sources. Counts data and principal components take the form of tabular data easily readable in R or python housed alongside additional participant-level metadata in dataset-specific HDF files discussed later in the Data Modeling vignette. Industry standard packages such as <a href="https://www.nature.com/articles/s41592-019-0619-0">Harmony</a> will be leveraged for this processing.
 
 # Summary level data
 
@@ -114,23 +106,13 @@ Code used for the analysis will be provided to the public in FAIRkit and FAIRgit
 
 SysBio FAIRplex stakeholders have prioritized the ability to analyze data across AMP projects for common inflammatory signatures. To address this need, we have identified two areas of community-enabling research resources. The goal is to adopt these with a focus on inflammation and ensure they can scale easily to address multiple disease constellations after receiving feedback from the community.
 
--   We will generate data-driven networks within known pathways in disease tissues (and cell-types) stratified by case/control or treated/untreated status, highlighting genes in inflammatory pathways using established codebases from the SDH team[^merged_core_dti_docs-18].
+-   We will generate data-driven networks within known pathways in disease tissues (and cell-types) stratified by case/control or treated/untreated status, highlighting genes in inflammatory pathways using <a href="https://www.nature.com/articles/s41531-022-00288-w">established codebases from the SDH team</a>.
 
--   We will perform pathway and network enrichment analyses from summary statistics for all differential expression analyses, using foundational genetic pathways from the Molecular Signatures Database and the network communities. This will use an existing codebase from the SDH team that has also been previously published[^merged_core_dti_docs-19].
-
-[^merged_core_dti_docs-18]: <https://www.nature.com/articles/s41531-022-00288-w>
-
-[^merged_core_dti_docs-19]: <https://pmc.ncbi.nlm.nih.gov/articles/PMC8422160/>
+-   We will perform pathway and network enrichment analyses from summary statistics for all differential expression analyses, using foundational genetic pathways from the Molecular Signatures Database and the network communities. This will use an existing codebase from the SDH team that has also been <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC8422160/">previously published</a>.
 
 ## Harmonized data
 
-The initial work will focus on making data interoperable. Raw genetic or omics data can be directly harmonized using processes specific to each modality. Transcriptomic and proteomic data from contributing AMPs will be jointly reprocessed from raw data files using tooling developed by members of the Science and Data Harmonization (SDH) team such as ProtPipe or the CARD Unified Multi-omics Pipeline[^merged_core_dti_docs-20]. Genetic data will be reprocessed using a similar approach[^merged_core_dti_docs-21],[^merged_core_dti_docs-22].
-
-[^merged_core_dti_docs-20]: <https://pubmed.ncbi.nlm.nih.gov/38168437/>
-
-[^merged_core_dti_docs-21]: <https://pubmed.ncbi.nlm.nih.gov/38585876/>
-
-[^merged_core_dti_docs-22]: <https://pubmed.ncbi.nlm.nih.gov/30279509/>
+The initial work will focus on making data interoperable. Raw genetic or omics data can be directly harmonized using processes specific to each modality. Transcriptomic and proteomic data from contributing AMPs will be jointly reprocessed from raw data files using tooling developed by members of the Science and Data Harmonization (SDH) team such as ProtPipe or the CARD <a href="https://pubmed.ncbi.nlm.nih.gov/38168437/">Unified Multi-omics Pipeline</a>. Genetic data will be reprocessed using a similar approcah <a href="https://pubmed.ncbi.nlm.nih.gov/38585876/">such as</a>, <a href="https://pubmed.ncbi.nlm.nih.gov/30279509/">and</a>.
 
 Due to the computationally intensive nature of processing raw omics data the focus for now has been on interoperable data. The use of standard pipeline tooling as described above will prospectively harmonize datasets and generally ensure interoperability and efficiency.
 
