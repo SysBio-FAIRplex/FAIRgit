@@ -4,15 +4,11 @@
 
 The SysBio Common Data Model (SysBio CDM) will provide a standardized framework that defines how data entities, attributes, and relationships are organized across multiple datasets. The SysBio CDM will support consistency, interoperability, and easier integration of data from different sources.
 
-We will base the core element of the SysBio CDM on the Observational Medical Outcomes Partnership (OMOP) Common Data Model (CDM)[^merged_core_dti_docs-23] and extend it by modeling relationships from the ‘Person’ to specimens, assays, files, and genes, and the upstream AMP project dataset relationship. Much of this work will be influenced by foundational efforts from the NLM CDE Catalog, Ontology for Biomedical Investigations (OBI)[^merged_core_dti_docs-24], and the <a href="https://support.researchallofus.org/hc/en-us/articles/4619151535508-Data-Types-and-Organization">All of Us implementation of OMOP</a>
+We will base the core element of the SysBio CDM on the <a href="https://www.ohdsi.org/data-standardization/Observational">Medical Outcomes Partnership (OMOP) CDM</a> and extend it by modeling relationships from the ‘Person’ to specimens, assays, files, and genes, and the upstream AMP project Dataset relationship. Much of this work will be influenced by foundational efforts from the <a href="https://cde.nlm.nih.gov/home">NLM CDE Catalog</a>, <a href="https://www.nature.com/articles/npre.2009.3482.1">Ontology-Based eXtensible data model (OBX)</a>, and the <a href="https://support.researchallofus.org/hc/en-us/articles/4619151535508-Data-Types-and-Organization">All of Us data organizatiob</a>
 
-[^merged_core_dti_docs-23]: <https://fairkit-498260019893.us-central1.run.app/?state=1826fc0b-bad3-4704-aa14-5b498d4c8247>
+The intent is for the SysBio CDM to include the required properties and variables for individual AMPs, facilitating data return. This will allow for queries through SysBio FAIRplex using the harmonized variables and the individual AMPs using AMP specific variables. See the <a href="https://github.com/SysBio-FAIRplex/FAIRgit/blob/main/science-harmonization/documentation/DataInputOutput.md">data harmonization methods and outputs</a>
 
-[^merged_core_dti_docs-24]: <https://www.nature.com/articles/npre.2009.3482.1>
-
-The intent is for the SysBio CDM to include the required properties and variables for individual AMPs, facilitating data return. This will allow for queries through SysBio FAIRplex using the harmonized variables and the individual AMPs using AMP specific variables.
-
-**This work has been initiated through a survey of data dictionaries and harmonized data elements which support the data standardization, collected from AMP programs. These will be expanded on as additional data is incorporated.**
+**This work has been initiated through a survey of a subset of data dictionaries and data elements collected from AMP Projects. These will be expanded on as additional elements are incorporated.**
 
 # Introduction to OMOP Standards
 
