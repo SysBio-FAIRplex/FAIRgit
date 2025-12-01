@@ -3,6 +3,8 @@ The SysBio FAIRplex teams are developing a federated data platform designed to p
 
 See the documentation for a description of the SysBio FAIRplex data landscape, data harmonization methods, and data model. The SysBio FAIRplex platform will serve as a central location for performing data discovery through FAIRkit, data exploration through visualization tools hosted in the FAIRplex platform, and data analysis through direct download where permitted, or in cloud workspaces such as the Verily Workbench.
 
+**Questions? Contact us through FAIRgit@datatecnica.com**
+
 [^merged_core_dti_docs-10]: [https://docs.google.com/document/d/1Im4XDBghVmgdPPercQi4Vg1aODB6kbfam1h10zqTHIM/edit?tab=t.g9ozssacnemv\\#heading=h.gwp92a45r22t](https://docs.google.com/document/d/1Im4XDBghVmgdPPercQi4Vg1aODB6kbfam1h10zqTHIM/edit?tab=t.g9ozssacnemv\#heading=h.gwp92a45r22t){.uri}
 
 ## Content Structure
