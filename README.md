@@ -7,6 +7,8 @@ Let's go **open science**!
 
 **Please read below before your first commit (3 minute read only)!**
 
+**Questions? Contact us through FAIRgit@datatecnica.com**
+
 ## Overview
 
 FAIRgit serves as the central GitHub organization for the SysBio FAIRplex Project, designed to promote collaborative, transparent, and reproducible research following FAIR (Findable, Accessible, Interoperable, Reusable) principles. This document outlines the organizational structure, development workflows, and coding standards that govern all repositories within the FAIRgit ecosystem.
